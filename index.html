@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#1a2540">
+<title>🌱 Mærk dit åndedræt</title>
+<meta name="description" content="En enkel og rolig åndedræts-side for børn. Bare træk vejret med cirklen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-deep: #1a2540;
+  --bg-mid: #2d3a55;
+  --bg-warm: #3a3450;
+  --warm: #f5e4c3;
+  --glow-1: #ffd89b;
+  --glow-2: #ff9d6c;
+  --glow-3: #ffb787;
+  --text: #f5e4c3;
+  --text-soft: rgba(245, 228, 195, 0.55);
+  --text-faint: rgba(245, 228, 195, 0.3);
+}
+
+*{box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent;}
+
+html, body {
+  background: radial-gradient(ellipse at 50% 60%, var(--bg-warm), var(--bg-deep) 70%);
+  color: var(--text);
+  font-family: 'Quicksand', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  overflow: hidden;
+  font-weight: 400;
+}
+
+/* Soft starfield — subtle warm pinpricks like fireflies */
+.stars {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    radial-gradient(1px 1px at 22% 14%, rgba(255, 216, 155, 0.5), transparent),
+    radial-gradient(1px 1px at 65% 22%, rgba(255, 216, 155, 0.35), transparent),
+    radial-gradient(1px 1px at 88% 18%, rgba(255, 216, 155, 0.4), transparent),
+    radial-gradient(1px 1px at 14% 78%, rgba(255, 216, 155, 0.35), transparent),
+    radial-gradient(1px 1px at 78% 88%, rgba(255, 216, 155, 0.45), transparent),
+    radial-gradient(1px 1px at 52% 92%, rgba(255, 216, 155, 0.25), transparent),
+    radial-gradient(1px 1px at 38% 38%, rgba(255, 216, 155, 0.3), transparent),
+    radial-gradient(1px 1px at 92% 62%, rgba(255, 216, 155, 0.3), transparent);
+  pointer-events: none;
+  opacity: 0.8;
+  animation: starShimmer 8s ease-in-out infinite alternate;
+}
+
+@keyframes starShimmer {
+  from { opacity: 0.6; }
+  to { opacity: 0.9; }
+}
+
+/* Layout */
+.wrap {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 20px 32px;
+  position: relative;
+}
+
+/* Top bar */
+.top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.lang-row {
+  display: flex;
+  gap: 4px;
+}
+
+.lang-btn {
+  background: transparent;
+  border: 1px solid rgba(245, 228, 195, 0.15);
+  color: var(--text-soft);
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.4s;
+  letter-spacing: 0.05em;
+}
+
+.lang-btn:hover, .lang-btn:active {
+  border-color: rgba(255, 216, 155, 0.4);
+  color: var(--text);
+}
+
+.lang-btn.active {
+  background: rgba(255, 216, 155, 0.1);
+  border-color: rgba(255, 216, 155, 0.45);
+  color: var(--glow-1);
+}
+
+.exit-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-faint);
+  font-size: 22px;
+  cursor: pointer;
+  padding: 4px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  transition: all 0.3s;
+  font-weight: 300;
+  border-radius: 50%;
+}
+
+.exit-btn:hover {
+  color: var(--text-soft);
+}
+
+/* Title section */
+.intro {
+  text-align: center;
+  margin: 24px 0 12px;
+  opacity: 0;
+  animation: fadeIn 1.5s ease-out 0.2s forwards;
+}
+
+.title {
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.sprout {
+  font-size: 28px;
+  display: inline-block;
+  animation: sproutSway 6s ease-in-out infinite;
+}
+
+@keyframes sproutSway {
+  0%, 100% { transform: rotate(-3deg); }
+  50% { transform: rotate(3deg); }
+}
+
+.subtitle {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--text-soft);
+  max-width: 320px;
+  line-height: 1.5;
+  margin: 0 auto;
+  padding: 0 8px;
+}
+
+/* Breath circle — the heart of the page */
+.breath-zone {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  position: relative;
+  width: 100%;
+  min-height: 280px;
+  opacity: 0;
+  animation: fadeIn 2s ease-out 1s forwards;
+}
+
+.breath-circle-outer {
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, rgba(255, 216, 155, 0.15), transparent 60%);
+  animation: breatheOuter 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.breath-circle {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 35%,
+      rgba(255, 240, 200, 0.95),
+      rgba(255, 184, 120, 0.7) 55%,
+      rgba(255, 140, 90, 0.3) 100%);
+  box-shadow:
+    0 0 50px rgba(255, 200, 140, 0.5),
+    0 0 100px rgba(255, 180, 120, 0.25),
+    inset 0 0 30px rgba(255, 255, 255, 0.15);
+  display: grid;
+  place-items: center;
+  animation: breathe 8s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+}
+
+.breath-text {
+  font-size: 22px;
+  font-weight: 400;
+  color: rgba(60, 40, 20, 0.7);
+  letter-spacing: 0.15em;
+  font-style: italic;
+  user-select: none;
+  pointer-events: none;
+  transition: opacity 0.8s ease-in-out;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(0.75);
+  }
+  50% {
+    transform: scale(1.0);
+  }
+}
+
+@keyframes breatheOuter {
+  0%, 100% {
+    transform: scale(0.85);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.9;
+  }
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* Footer hint */
+.hint-wrap {
+  text-align: center;
+  padding: 16px 12px 8px;
+  opacity: 0;
+  animation: fadeIn 2s ease-out 2s forwards;
+}
+
+.hint {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--text-soft);
+  max-width: 360px;
+  line-height: 1.7;
+  margin: 0 auto;
+  font-style: italic;
+}
+
+/* Mobile tuning */
+@media (max-width: 600px) {
+  .breath-circle { width: 160px; height: 160px; }
+  .breath-circle-outer { width: 240px; height: 240px; }
+  .title { font-size: 22px; }
+  .subtitle { font-size: 14px; }
+  .breath-text { font-size: 19px; }
+  .hint { font-size: 12px; }
+}
+
+@media (max-height: 700px) {
+  .intro { margin: 16px 0 8px; }
+  .breath-zone { min-height: 230px; }
+  .breath-circle { width: 150px; height: 150px; }
+  .breath-circle-outer { width: 220px; height: 220px; }
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .breath-circle, .breath-circle-outer, .sprout, .stars {
+    animation: none;
+  }
+  .breath-circle { transform: scale(0.9); opacity: 0.9; }
+}
+</style>
+</head>
+<body>
+
+<div class="stars"></div>
+
+<div class="wrap">
+
+  <div class="top">
+    <div class="lang-row">
+      <button class="lang-btn" data-lang="da">DA</button>
+      <button class="lang-btn" data-lang="sv">SV</button>
+      <button class="lang-btn" data-lang="no">NO</button>
+      <button class="lang-btn" data-lang="en">EN</button>
+    </div>
+    <button class="exit-btn" onclick="goBack()" aria-label="Tilbage">×</button>
+  </div>
+
+  <div class="intro">
+    <h1 class="title">
+      <span class="sprout">🌱</span>
+      <span id="title-text">Mærk dit åndedræt</span>
+    </h1>
+    <p class="subtitle" id="subtitle-text">Det er dit. Du har det altid med dig.</p>
+  </div>
+
+  <div class="breath-zone">
+    <div class="breath-circle-outer"></div>
+    <div class="breath-circle">
+      <div class="breath-text" id="breath-text">ind</div>
+    </div>
+  </div>
+
+  <div class="hint-wrap">
+    <p class="hint" id="hint-text">Hvis du er bange eller ked af det, prøv at trække vejret langsomt med cirklen.</p>
+  </div>
+
+</div>
+
+<script>
+const TEXTS = {
+  da: {
+    htmlLang: "da",
+    title: "Mærk dit åndedræt",
+    subtitle: "Det er dit. Du har det altid med dig.",
+    hint: "Hvis du er bange eller ked af det, prøv at trække vejret langsomt med cirklen.",
+    in: "ind",
+    out: "ud"
+  },
+  sv: {
+    htmlLang: "sv",
+    title: "Känn din andning",
+    subtitle: "Den är din. Du har den alltid med dig.",
+    hint: "Om du är rädd eller ledsen, prova att andas långsamt med cirkeln.",
+    in: "in",
+    out: "ut"
+  },
+  no: {
+    htmlLang: "no",
+    title: "Kjenn pusten din",
+    subtitle: "Den er din. Du har den alltid med deg.",
+    hint: "Hvis du er redd eller lei deg, prøv å puste langsomt med sirkelen.",
+    in: "inn",
+    out: "ut"
+  },
+  en: {
+    htmlLang: "en",
+    title: "Feel your breath",
+    subtitle: "It's yours. You always have it with you.",
+    hint: "If you feel scared or sad, try breathing slowly with the circle.",
+    in: "in",
+    out: "out"
+  }
+};
+
+let currentLang = 'da';
+
+function setLang(lang) {
+  if (!TEXTS[lang]) return;
+  currentLang = lang;
+  const t = TEXTS[lang];
+  document.getElementById('title-text').textContent = t.title;
+  document.getElementById('subtitle-text').textContent = t.subtitle;
+  document.getElementById('hint-text').textContent = t.hint;
+  document.documentElement.lang = t.htmlLang;
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+}
+
+function goBack() {
+  // Soft exit — go back if there's history, otherwise just stay quietly.
+  if (window.history.length > 1) {
+    window.history.back();
+  }
+}
+
+// Set up language buttons
+document.querySelectorAll('.lang-btn').forEach(btn => {
+  btn.addEventListener('click', () => setLang(btn.dataset.lang));
+});
+
+// Detect initial language: URL param > browser language > Danish
+function detectLang() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const urlLang = params.get('lang');
+    if (urlLang && TEXTS[urlLang]) return urlLang;
+  } catch(e) {}
+  const browserLang = (navigator.language || 'da').toLowerCase().slice(0, 2);
+  if (TEXTS[browserLang]) return browserLang;
+  return 'da';
+}
+
+setLang(detectLang());
+
+// Synchronize "ind"/"ud" text with the breathing animation.
+// 8 second cycle — 4s inhale, 4s exhale. Natural relaxed breathing for children.
+const breathText = document.getElementById('breath-text');
+const CYCLE_MS = 8000;
+const INHALE_MS = 4000;
+const cycleStart = Date.now();
+
+function updateBreathText() {
+  const elapsed = (Date.now() - cycleStart) % CYCLE_MS;
+  const newText = elapsed < INHALE_MS
+    ? TEXTS[currentLang].in
+    : TEXTS[currentLang].out;
+  if (breathText.textContent !== newText) {
+    breathText.textContent = newText;
+  }
+  requestAnimationFrame(updateBreathText);
+}
+
+// Respect reduced-motion preference
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  updateBreathText();
+} else {
+  breathText.textContent = '';
+}
+</script>
+
+</body>
+</html>
