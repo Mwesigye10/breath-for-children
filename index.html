@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- Cache control: ensure visitors always see the latest version. -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="theme-color" content="#1a2540">
 <title>🌱 Mærk dit åndedræt</title>
 <meta name="description" content="En enkel og rolig åndedræts-side for børn. Bare træk vejret med cirklen.">
@@ -212,14 +216,16 @@ html, body {
 }
 
 .breath-text {
-  font-size: 22px;
+  font-size: 19px;
   font-weight: 400;
   color: rgba(60, 40, 20, 0.7);
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
   font-style: italic;
   user-select: none;
   pointer-events: none;
   transition: opacity 0.8s ease-in-out;
+  text-align: center;
+  white-space: nowrap;
 }
 
 @keyframes breathe {
@@ -246,32 +252,13 @@ html, body {
   to { opacity: 1; }
 }
 
-/* Footer hint */
-.hint-wrap {
-  text-align: center;
-  padding: 16px 12px 8px;
-  opacity: 0;
-  animation: fadeIn 2s ease-out 2s forwards;
-}
-
-.hint {
-  font-size: 13px;
-  font-weight: 300;
-  color: var(--text-soft);
-  max-width: 360px;
-  line-height: 1.7;
-  margin: 0 auto;
-  font-style: italic;
-}
-
 /* Mobile tuning */
 @media (max-width: 600px) {
   .breath-circle { width: 160px; height: 160px; }
   .breath-circle-outer { width: 240px; height: 240px; }
   .title { font-size: 22px; }
   .subtitle { font-size: 14px; }
-  .breath-text { font-size: 19px; }
-  .hint { font-size: 12px; }
+  .breath-text { font-size: 17px; }
 }
 
 @media (max-height: 700px) {
@@ -317,12 +304,8 @@ html, body {
   <div class="breath-zone">
     <div class="breath-circle-outer"></div>
     <div class="breath-circle">
-      <div class="breath-text" id="breath-text">ind</div>
+      <div class="breath-text" id="breath-text">ånd ind</div>
     </div>
-  </div>
-
-  <div class="hint-wrap">
-    <p class="hint" id="hint-text">Hvis du er bange eller ked af det, prøv at trække vejret langsomt med cirklen.</p>
   </div>
 
 </div>
@@ -333,33 +316,29 @@ const TEXTS = {
     htmlLang: "da",
     title: "Mærk dit åndedræt",
     subtitle: "Det er dit. Du har det altid med dig.",
-    hint: "Hvis du er bange eller ked af det, prøv at trække vejret langsomt med cirklen.",
-    in: "ind",
-    out: "ud"
+    in: "ånd ind",
+    out: "ånd ud"
   },
   sv: {
     htmlLang: "sv",
     title: "Känn din andning",
     subtitle: "Den är din. Du har den alltid med dig.",
-    hint: "Om du är rädd eller ledsen, prova att andas långsamt med cirkeln.",
-    in: "in",
-    out: "ut"
+    in: "andas in",
+    out: "andas ut"
   },
   no: {
     htmlLang: "no",
     title: "Kjenn pusten din",
     subtitle: "Den er din. Du har den alltid med deg.",
-    hint: "Hvis du er redd eller lei deg, prøv å puste langsomt med sirkelen.",
-    in: "inn",
-    out: "ut"
+    in: "pust inn",
+    out: "pust ut"
   },
   en: {
     htmlLang: "en",
     title: "Feel your breath",
     subtitle: "It's yours. You always have it with you.",
-    hint: "If you feel scared or sad, try breathing slowly with the circle.",
-    in: "in",
-    out: "out"
+    in: "breathe in",
+    out: "breathe out"
   }
 };
 
@@ -371,7 +350,6 @@ function setLang(lang) {
   const t = TEXTS[lang];
   document.getElementById('title-text').textContent = t.title;
   document.getElementById('subtitle-text').textContent = t.subtitle;
-  document.getElementById('hint-text').textContent = t.hint;
   document.documentElement.lang = t.htmlLang;
   document.querySelectorAll('.lang-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.lang === lang);
